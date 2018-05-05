@@ -4,8 +4,8 @@ import java.util.Random;
 public class Map {
 	public static final int MAP_COLUMNS = 20;
 	public static final int MAP_ROWS = 20;
-	static String [][]mapa;
-	ArrayList<Coordenada> cartorios; // guarda as coordenadas dos cartórios
+	private static String [][]mapa;
+	private ArrayList<Coordenada> cartorios; // guarda as coordenadas dos cartórios
 
 	public Map() {
 		this.mapa = new String[MAP_ROWS][MAP_COLUMNS];
@@ -43,6 +43,7 @@ public class Map {
 				y = random.nextInt(MAP_COLUMNS);
 			}
 			addCadindato(x, y, candidato);
+			candidato.initialize(this);
 		}
 	}
 
@@ -65,10 +66,11 @@ public class Map {
 		}
 	}
 
+
+
 	private void addCadindato(int x, int y, Candidato c){
 		String genero = c.getGenero() == Genero.MASCULINO ? "M" : "F";
-		String candidatoString = genero + c.getId();
-		mapa[x][y] = candidatoString;
+		mapa[x][y] = genero + c.getId();;
 	}
 
 	private void addCartorio(int x, int y){
