@@ -19,7 +19,20 @@ public class Map {
 			}
 		}
 	}
-
+	
+        public String getConteudo(int x, int y){
+            return mapa[x][y];
+        }
+        
+        
+	public int getColumns(){
+		return MAP_COLUMNS;
+	}
+	
+	public int getRows(){
+		return MAP_ROWS;
+	}
+	
 	public void gerarCartorios(int numCartorios){
 		Random random = new Random();
 		int x = random.nextInt(MAP_ROWS);
@@ -93,4 +106,5 @@ public class Map {
 			return true;
 		return false;
 	}
+	
 }
