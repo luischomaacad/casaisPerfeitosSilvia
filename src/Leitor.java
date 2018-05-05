@@ -16,8 +16,7 @@ public class Leitor {
         String currentLine;
         currentLine = bufferReader.readLine();
         scanner = new Scanner(currentLine);
-        int numCasais = scanner.nextInt();
-        configIniciais.setNumCasais(numCasais);
+        configIniciais.setNumCasais(scanner.nextInt());
         configIniciais.setNumCartorios(scanner.nextInt());
         popularCandidatos(Genero.MASCULINO, configIniciais, bufferReader);
         popularCandidatos(Genero.FEMININO, configIniciais, bufferReader);
