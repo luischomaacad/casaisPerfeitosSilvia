@@ -19,7 +19,6 @@ public class App {
 		map.initialize();
 		//map.printMap();
 		ArrayList<Candidato> candidatos = configIniciais.getCandidato();
-		map.addCadindato(5, 5, candidatos.get(0));
 		map.addParedes(1, 1);
 		map.addParedes(1, 2);
 		map.addParedes(1, 3);
@@ -28,6 +27,7 @@ public class App {
 		map.addParedes(5, 1);
 		map.addParedes(7, 7);
 		map.addParedes(7, 8);
+		map.posicionarCandidatos(candidatos);
 		map.gerarCartorios(configIniciais.getNumCartorios());
 		map.printMap();
 	}

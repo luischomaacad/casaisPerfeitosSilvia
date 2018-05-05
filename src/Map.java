@@ -15,7 +15,7 @@ public class Map {
 	public static void initialize() {
 		for(int i = 0; i<MAP_ROWS; i++) {
 			for(int j = 0; j<MAP_COLUMNS; j++) {
-				mapa[i][j] = ".";
+				mapa[i][j] = "_ ";
 			}
 		}
 	}
@@ -33,10 +33,17 @@ public class Map {
 		}
 	}
 
-	public void addCartorio(int x, int y){
-		mapa[x][y] = "C";
-		Coordenada c = new Coordenada(x,y);
-		cartorios.add(c);
+	public void posicionarCandidatos(ArrayList<Candidato> candidatos){
+		Random random = new Random();
+		int x = random.nextInt(MAP_ROWS);
+		int y = random.nextInt(MAP_COLUMNS);
+		for (Candidato candidato: candidatos) {
+			while(!mapa[x][y].equalsIgnoreCase("_ ")){
+				x = random.nextInt(MAP_ROWS);
+				y = random.nextInt(MAP_COLUMNS);
+			}
+			addCadindato(x, y, candidato);
+		}
 	}
 
 	public ArrayList<Coordenada> getCartorios(){
@@ -44,14 +51,8 @@ public class Map {
 	}
 
 	public void addParedes(int x, int y){
-		if((mapa[x][y].equalsIgnoreCase("."))){ // . = nada
-			mapa[x][y] = "@";
-		}
-	}
-
-	public void addCadindato(int x, int y, Candidato c){
-		if((mapa[x][y].equalsIgnoreCase("."))){
-			mapa[x][y] = String.valueOf(c.getId());
+		if((mapa[x][y].equalsIgnoreCase("_ "))){ // . = nada
+			mapa[x][y] = "@ ";
 		}
 	}
 
@@ -64,17 +65,29 @@ public class Map {
 		}
 	}
 
+	private void addCadindato(int x, int y, Candidato c){
+		String genero = c.getGenero() == Genero.MASCULINO ? "M" : "F";
+		String candidatoString = genero + c.getId();
+		mapa[x][y] = candidatoString;
+	}
+
+	private void addCartorio(int x, int y){
+		mapa[x][y] = "C ";
+		Coordenada c = new Coordenada(x,y);
+		cartorios.add(c);
+	}
+
 	private boolean lugarValidoCartorio(int x, int y){
-		if(!mapa[x][y].equalsIgnoreCase(".")){
+		if(!mapa[x][y].equalsIgnoreCase("_ ")){
 			return false;
 		}
-		if((x + 1) != MAP_ROWS && mapa[x + 1][y].equals("@"))
+		if((x + 1) != MAP_ROWS && mapa[x + 1][y].equals("@ "))
 			return true;
-		if(x != 0 && mapa[x - 1][y].equals("@"))
+		if(x != 0 && mapa[x - 1][y].equals("@ "))
 			return true;
-		if((y + 1) != MAP_COLUMNS && mapa[x][y + 1].equals("@"))
+		if((y + 1) != MAP_COLUMNS && mapa[x][y + 1].equals("@ "))
 			return true;
-		if(y != 0 && mapa[x][y - 1].equals("@"))
+		if(y != 0 && mapa[x][y - 1].equals("@ "))
 			return true;
 		return false;
 	}
