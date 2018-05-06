@@ -18,10 +18,15 @@ public class Candidato {
         this.estadoCivil = EstadoCivil.SOLTEIRO;
     }
 
+    public Candidato() {
+        this.preferencias = new ArrayList<Integer>();
+    }
+
     public void initialize(Map mapa) {
         this.mapa = mapa;
     }
 
+    //region Algoritmo AEstrela
     public ArrayList<Coordenada> getVizinhos(int x, int y) {
         ArrayList<Coordenada> viz = new ArrayList<Coordenada>();
         int xa = x - 1; // Variavel auxiliar para X
@@ -46,7 +51,7 @@ public class Candidato {
                     }
                     ya = ya + 1; //Soma +1 em Y
                 }
-                  ya = y - 1; // Começa o Y de novo para olhar tudo em volta!
+                ya = y - 1; // Começa o Y de novo para olhar tudo em volta!
             }
             xa = xa + 1; //Soma + em X
         }
@@ -73,15 +78,15 @@ public class Candidato {
         private Coordenada c;
         private Custos pai;
         private double custo;
-        
+
         public Custos getPai() {
             return pai;
         }
-        
+
         public void addPai(Custos x){
             pai = x;
         }
-        
+
         public Coordenada getC() {
             return c;
         }
@@ -164,7 +169,10 @@ public class Candidato {
         //https://www.youtube.com/watch?v=s29WpBi2exw
         return inverteLista(r);
     }
-    
+
+    //endregion
+
+    //region Relacao Com Agentes
     public void verificarCandidato(Candidato candidato) {
         if (preferencias.indexOf(candidato) > preferencias.indexOf(conjuge)
                 || this.estadoCivil == EstadoCivil.SOLTEIRO) {
@@ -203,13 +211,13 @@ public class Candidato {
         this.estadoCivil = EstadoCivil.CASADO;
     }
 
+    //endregion
+
     public void atualizarMapa(Coordenada posicaoAnterior){
         this.mapa.atualizarCandidato(this, posicaoAnterior);
     }
 
-    public Candidato() {
-        this.preferencias = new ArrayList<Integer>();
-    }
+    //region Getters&Setters
 
     public int getId() {
         return id;
@@ -256,4 +264,6 @@ public class Candidato {
     public Coordenada getPosicaoAtual() {
         return posicaoAtual;
     }
+
+    //endregion
 }
