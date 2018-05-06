@@ -20,10 +20,11 @@ public class Map {
 		}
 	}
 	
-        public String getConteudo(int x, int y){
+	public String getConteudo(int x, int y){
             return mapa[x][y];
         }
-        
+
+	public String getConteudo(Coordenada c){ return mapa[c.getX()][c.getY()]; }
         
 	public int getColumns(){
 		return MAP_COLUMNS;

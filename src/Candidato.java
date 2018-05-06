@@ -1,3 +1,5 @@
+import com.sun.tools.javah.Gen;
+
 import java.util.ArrayList;
 
 public class Candidato {
@@ -16,7 +18,6 @@ public class Candidato {
         this.id = id;
         this.preferencias.addAll(preferencias);
         this.genero = genero;
-        this.estadoCivil = EstadoCivil.SOLTEIRO;
     }
 
     public Candidato() {
@@ -25,6 +26,7 @@ public class Candidato {
 
     public void initialize(Map mapa) {
         this.mapa = mapa;
+        this.estadoCivil = EstadoCivil.SOLTEIRO;
         this.direcao = Direcao.getDirecaoAleatoria();
     }
 
@@ -32,6 +34,26 @@ public class Candidato {
     public void caminhar(){
         if(destino == null)
             caminharReto();
+        Coordenada coordenada = existeCandidatosProximos();
+        if(coordenada != null){
+            System.out.println("ENCONTROU ALGUEM");
+//            caminhoAEstrela(coordenada);
+        }
+
+    }
+
+    public Coordenada existeCandidatosProximos(){
+        ArrayList<Coordenada> coordenadas = getVizinhos(this.posicaoAtual.getX(), this.posicaoAtual.getY(), 2);
+        for (Coordenada coordenada: coordenadas) {
+
+            if(this.genero == Genero.MASCULINO && this.mapa.getConteudo(coordenada).contains("F")
+                    || this.genero == Genero.FEMININO && this.mapa.getConteudo(coordenada).contains("M")) {
+                if (this.estadoCivil == EstadoCivil.SOLTEIRO)
+                    return coordenada;
+
+            }
+        }
+        return null;
     }
 
     public void caminharReto(){
@@ -56,7 +78,7 @@ public class Candidato {
                 break;
             case ESQUERDA:
                 if(verificarCoordenada(new Coordenada(x, y - 1)))
-                    setPosicaoAtual(new Coordenada(x, y));
+                    setPosicaoAtual(new Coordenada(x, y - 1));
                 else {
                     this.direcao = Direcao.DIREITA;
                     setPosicaoAtual(new Coordenada(x, y - 1));
@@ -86,21 +108,22 @@ public class Candidato {
     //endregion
 
     //region Algoritmo AEstrela
-    public ArrayList<Coordenada> getVizinhos(int x, int y) {
+    public ArrayList<Coordenada> getVizinhos(int x, int y, int dimensao) {
         ArrayList<Coordenada> viz = new ArrayList<Coordenada>();
-        int xa = x - 1; // Variavel auxiliar para X
-        int ya = y - 1; // Variavel auxiliar para Y
+        int xa = x - dimensao; // Variavel auxiliar para X
+        int ya = y - dimensao; // Variavel auxiliar para Y
+        int range = (dimensao * 2) + 1;
 
-        for (int i = 0; i < 3; i++) { // Controla  o X (x - 1, x , x + 1)
+        for (int i = 0; i < range; i++) { // Controla  o X (x - 1, x , x + 1)
             //System.out.println("vendo o xa " + xa);
             if (xa >= 0 && xa < mapa.getRows()) { // Vejo se não está fora do tabuleiro
                 //System.out.println("entrei no xa " + xa);
-                for (int j = 0; j < 3; j++) { // Controla o Y (y - 1, y , y + 1)
+                for (int j = 0; j < range; j++) { // Controla o Y (y - 1, y , y + 1)
                     //System.out.println("vendo o ya " + ya);
                     if (ya >= 0 && ya < mapa.getColumns()) { // Vejo se não está fora do tabuleiro
                         //System.out.println("entrei no ya " + ya);
                         //System.out.println("Conteudo " + mapa.getConteudo(xa, ya) + "| ");
-                        if (mapa.getConteudo(xa, ya).equals("_ ")) { // Se o campo que eu estou olhando não é uma parede
+                        if (!mapa.getConteudo(xa, ya).equals("@ ")) { // Se o campo que eu estou olhando não é uma parede
                             if (!(x == xa && y == ya)) { // Se for a propria posicao de entrada, entao nao pode colocar como vizinho
                                 Coordenada c = new Coordenada(xa, ya);
                                 viz.add(c);
@@ -110,7 +133,7 @@ public class Candidato {
                     }
                     ya = ya + 1; //Soma +1 em Y
                 }
-                ya = y - 1; // Começa o Y de novo para olhar tudo em volta!
+                ya = y - dimensao; // Começa o Y de novo para olhar tudo em volta!
             }
             xa = xa + 1; //Soma + em X
         }
@@ -170,7 +193,7 @@ public class Candidato {
                 System.out.println("final");
                 return atual; // se chegou no destino, retorna o caminho
             }
-            ArrayList<Coordenada> vizinhos = getVizinhos(atual.getC().getX(), atual.getC().getY());
+            ArrayList<Coordenada> vizinhos = getVizinhos(atual.getC().getX(), atual.getC().getY(), 1);
             fechada.add(atual);
             aberta.remove(i);
             for (int j = 0; j < vizinhos.size(); j++) {
