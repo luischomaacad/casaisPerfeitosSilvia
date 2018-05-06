@@ -30,17 +30,31 @@ public class App {
         map.gerarCartorios(configIniciais.getNumCartorios());
         map.posicionarCandidatos(candidatos);
         map.printMap();
+        try {
+            executarCiclo(candidatos, map);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //candidatos.add(teste);
         //map.posicionarCandidatos(candidatos);
-        map.printMap();
+//        map.printMap();
 //        ArrayList<Coordenada> te = teste.getVizinhos(15, 15);
 //        for (int i = 0; i < te.size(); i++) {
 //            System.out.println(te.get(i).getX() + "," + te.get(i).getY());
 //        }
-        ArrayList<Coordenada> t = candidatos.get(0).caminhoAEstrela(new Coordenada(1, 10));
-        for (int i = 0; i < t.size(); i++) {
-            System.out.println(t.get(i).getX() + "," + t.get(i).getY());
-        }
+//        ArrayList<Coordenada> t = candidatos.get(0).caminhoAEstrela(new Coordenada(1, 10));
+//        for (int i = 0; i < t.size(); i++) {
+//            System.out.println(t.get(i).getX() + "," + t.get(i).getY());
+//        }
     }
 
+    public static void executarCiclo(ArrayList<Candidato> candidatos, Map map) throws InterruptedException {
+        for(int x = 0; x <= 10; x++) {
+            for (Candidato candidato: candidatos) {
+                candidato.caminhar();
+            }
+            map.printMap();
+            Thread.currentThread().sleep(1000);
+        }
+    }
 }

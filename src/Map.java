@@ -81,10 +81,9 @@ public class Map {
 		System.out.println("========================================================================");
 	}
 
-	public void atualizarCandidato(Candidato candidato, Coordenada posicaoAnterior) {
+	public void atualizarCandidato(Candidato candidato, Coordenada posicaoAnterior) throws InterruptedException {
 		this.mapa[posicaoAnterior.getX()][posicaoAnterior.getY()] = "_ ";
 		addCadindato(candidato);
-		printMap();
 	}
 
 	private void addCadindato(Candidato c) {

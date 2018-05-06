@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 public class Candidato {
@@ -10,6 +9,8 @@ public class Candidato {
     private Candidato conjuge;
     private EstadoCivil estadoCivil;
     private Coordenada posicaoAtual;
+    private Coordenada destino;
+    private Direcao direcao;
 
     public Candidato(int id, ArrayList<Integer> preferencias, Genero genero) {
         this.id = id;
@@ -24,7 +25,65 @@ public class Candidato {
 
     public void initialize(Map mapa) {
         this.mapa = mapa;
+        this.direcao = Direcao.getDirecaoAleatoria();
     }
+
+    //region Caminhamento
+    public void caminhar(){
+        if(destino == null)
+            caminharReto();
+    }
+
+    public void caminharReto(){
+        int x = this.posicaoAtual.getX();
+        int y = this.posicaoAtual.getY();
+        switch (this.direcao) {
+            case CIMA:
+                if(verificarCoordenada(new Coordenada(x - 1, y)))
+                    setPosicaoAtual(new Coordenada(x - 1, y));
+                else {
+                   this.direcao = Direcao.BAIXO;
+                   setPosicaoAtual(new Coordenada(x + 1, y));
+                }
+                break;
+            case BAIXO:
+                if(verificarCoordenada(new Coordenada(x + 1, y)))
+                    setPosicaoAtual(new Coordenada(x + 1, y));
+                else {
+                    this.direcao = Direcao.CIMA;
+                    setPosicaoAtual(new Coordenada(x - 1, y));
+                }
+                break;
+            case ESQUERDA:
+                if(verificarCoordenada(new Coordenada(x, y - 1)))
+                    setPosicaoAtual(new Coordenada(x, y));
+                else {
+                    this.direcao = Direcao.DIREITA;
+                    setPosicaoAtual(new Coordenada(x, y - 1));
+                }
+                break;
+            case DIREITA:
+                if(verificarCoordenada(new Coordenada(x, y + 1)))
+                    setPosicaoAtual(new Coordenada(x, y + 1));
+                else {
+                    this.direcao = Direcao.ESQUERDA;
+                    setPosicaoAtual(new Coordenada(x, y - 1));
+                }
+                break;
+        }
+    }
+
+    public boolean verificarCoordenada(Coordenada coordenada) {
+        if(coordenada.getY() >= this.mapa.getColumns() || coordenada.getY() < 0)
+            return false;
+        if(coordenada.getX() >= this.mapa.getRows() || coordenada.getX() < 0)
+            return false;
+        if(!mapa.getConteudo(coordenada.getX(), coordenada.getY()).equals("_ "))
+            return false;
+        return true;
+    }
+
+    //endregion
 
     //region Algoritmo AEstrela
     public ArrayList<Coordenada> getVizinhos(int x, int y) {
@@ -214,7 +273,11 @@ public class Candidato {
     //endregion
 
     public void atualizarMapa(Coordenada posicaoAnterior){
-        this.mapa.atualizarCandidato(this, posicaoAnterior);
+        try {
+            this.mapa.atualizarCandidato(this, posicaoAnterior);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     //region Getters&Setters
