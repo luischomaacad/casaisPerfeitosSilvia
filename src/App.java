@@ -28,8 +28,6 @@ public class App {
         map.addParedes(7, 7);
         map.addParedes(7, 8);
         map.gerarCartorios(configIniciais.getNumCartorios());
-        candidatos.get(0).setId(99);
-        candidatos.get(0).setPosicaoAtual(new Coordenada(2,4));
         map.posicionarCandidatos(candidatos);
         map.printMap();
         //candidatos.add(teste);
@@ -39,7 +37,7 @@ public class App {
 //        for (int i = 0; i < te.size(); i++) {
 //            System.out.println(te.get(i).getX() + "," + te.get(i).getY());
 //        }
-        ArrayList<Coordenada> t = candidatos.get(0).caminhoAEstrela(new Coordenada(4, 2));
+        ArrayList<Coordenada> t = candidatos.get(0).caminhoAEstrela(new Coordenada(1, 10));
         for (int i = 0; i < t.size(); i++) {
             System.out.println(t.get(i).getX() + "," + t.get(i).getY());
         }

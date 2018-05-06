@@ -46,7 +46,7 @@ public class Candidato {
                     }
                     ya = ya + 1; //Soma +1 em Y
                 }
-                ya = x - 1; // Começa o Y de novo para olhar tudo em volta!
+                  ya = y - 1; // Começa o Y de novo para olhar tudo em volta!
             }
             xa = xa + 1; //Soma + em X
         }
@@ -96,13 +96,13 @@ public class Candidato {
         }
     }
 
-    private Custos aEstrela(Coordenada d){
+    private Custos aEstrela(Coordenada destino){
         ArrayList<Custos> aberta = new ArrayList<Custos>();
         ArrayList<Custos> fechada = new ArrayList<Custos>();
         aberta.add(new Custos(posicaoAtual, 0.0, null));
         for (int i = 0; i < aberta.size(); i++) {
             Custos atual = aberta.get(i);
-            if (d.getX() == atual.getC().getX() && d.getY() == atual.getC().getY()) {
+            if (destino.getX() == atual.getC().getX() && destino.getY() == atual.getC().getY()) {
                 System.out.println("final");
                 return atual; // se chegou no destino, retorna o caminho
             }
@@ -110,7 +110,7 @@ public class Candidato {
             fechada.add(atual);
             aberta.remove(i);
             for (int j = 0; j < vizinhos.size(); j++) {
-                double dEuclidiana = distanciaEuclidiana(vizinhos.get(j), d);
+                double dEuclidiana = distanciaEuclidiana(vizinhos.get(j), destino);
                 boolean verifica = false; // variavel que avisa se ja coloquei o vizinho na lista aberta ou nao 
                 boolean proximo = false;
                 // Faz a verificacao para ver se não tem esse vizinho na lista aberta
@@ -141,7 +141,6 @@ public class Candidato {
                 }
             }
         }
-        
         return null;
     }
 
@@ -204,6 +203,10 @@ public class Candidato {
         this.estadoCivil = EstadoCivil.CASADO;
     }
 
+    public void atualizarMapa(Coordenada posicaoAnterior){
+        this.mapa.atualizarCandidato(this, posicaoAnterior);
+    }
+
     public Candidato() {
         this.preferencias = new ArrayList<Integer>();
     }
@@ -245,7 +248,9 @@ public class Candidato {
     }
 
     public void setPosicaoAtual(Coordenada posicaoAtual) {
+        Coordenada aux = this.posicaoAtual;
         this.posicaoAtual = posicaoAtual;
+        if(aux != null)  this.atualizarMapa(aux);
     }
 
     public Coordenada getPosicaoAtual() {

@@ -55,7 +55,8 @@ public class Map {
 				x = random.nextInt(MAP_ROWS);
 				y = random.nextInt(MAP_COLUMNS);
 			}
-			addCadindato(x, y, candidato);
+			candidato.setPosicaoAtual(new Coordenada(x, y));
+			addCadindato(candidato);
 			candidato.initialize(this);
 		}
 	}
@@ -77,13 +78,18 @@ public class Map {
 			}
 			System.out.println();
 		}
+		System.out.println("========================================================================");
 	}
 
+	public void atualizarCandidato(Candidato candidato, Coordenada posicaoAnterior) {
+		this.mapa[posicaoAnterior.getX()][posicaoAnterior.getY()] = "_ ";
+		addCadindato(candidato);
+		printMap();
+	}
 
-
-	private void addCadindato(int x, int y, Candidato c){
+	private void addCadindato(Candidato c) {
 		String genero = c.getGenero() == Genero.MASCULINO ? "M" : "F";
-		mapa[x][y] = genero + c.getId();;
+		mapa[c.getPosicaoAtual().getX()][c.getPosicaoAtual().getY()] = genero + c.getId();;
 	}
 
 	private void addCartorio(int x, int y){
