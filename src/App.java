@@ -51,9 +51,10 @@ public class App {
     public static void executarCiclo(ArrayList<Candidato> candidatos, Map map) throws InterruptedException {
         for(int x = 0; x <= 10; x++) {
             for (Candidato candidato: candidatos) {
-                candidato.caminhar();
+                candidato.acao();
             }
             map.printMap();
+
             Thread.currentThread().sleep(1000);
         }
     }

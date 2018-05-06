@@ -21,4 +21,13 @@ public class Coordenada {
     public void setY(int y) {
         this.y = y;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Coordenada){
+            Coordenada coordenada = (Coordenada) obj;
+            return this.x == coordenada.getX() && this.y == coordenada.getY();
+        }
+        return false;
+    }
 }

@@ -1,5 +1,6 @@
 import com.sun.tools.javah.Gen;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Candidato {
@@ -11,7 +12,7 @@ public class Candidato {
     private Candidato conjuge;
     private EstadoCivil estadoCivil;
     private Coordenada posicaoAtual;
-    private Coordenada destino;
+    private Destino destino;
     private Direcao direcao;
 
     public Candidato(int id, ArrayList<Integer> preferencias, Genero genero) {
@@ -30,30 +31,83 @@ public class Candidato {
         this.direcao = Direcao.getDirecaoAleatoria();
     }
 
-    //region Caminhamento
-    public void caminhar(){
-        if(destino == null)
-            caminharReto();
+    //region CAMINHAMENTO
+    //classe que define um caminho para onde o candidato quer chegar, seja o caminho para um cartório ou para um outro candidato
+    public class Destino {
+        private ArrayList<Coordenada> caminho;
+        private boolean ateCandidato;
+        private boolean ateCartorio;
+
+        public Destino(ArrayList<Coordenada> caminho, boolean ateCandidato, boolean ateCartorio){
+            this.caminho = caminho;
+            this.ateCandidato = ateCandidato;
+            this.ateCartorio = ateCartorio;
+        }
+
+        public ArrayList<Coordenada> getCaminho() { return caminho; }
+
+        public Coordenada getDestinoFinal() { return caminho.get(0); }
+
+        public boolean isAteCandidato() { return ateCandidato; }
+
+        public boolean isAteCartorio() { return ateCartorio; }
+    }
+
+    public void acao(){
+        if(this.destino == null && this.estadoCivil == EstadoCivil.SOLTEIRO)
+            procurarCandidatos(); //procura candidatos próximos e, se achar, define ele como seu destino
+        caminhar();
+    }
+
+    public void procurarCandidatos(){
         Coordenada coordenada = existeCandidatosProximos();
         if(coordenada != null){
             System.out.println("ENCONTROU ALGUEM");
-//            caminhoAEstrela(coordenada);
+            this.destino = new Destino(this.caminhoAteCandidato(coordenada), true, false);
         }
-
     }
 
+    //retorna a coordenada do primeiro candidato que encontrar até 2 casas de distância
     public Coordenada existeCandidatosProximos(){
         ArrayList<Coordenada> coordenadas = getVizinhos(this.posicaoAtual.getX(), this.posicaoAtual.getY(), 2);
         for (Coordenada coordenada: coordenadas) {
-
             if(this.genero == Genero.MASCULINO && this.mapa.getConteudo(coordenada).contains("F")
                     || this.genero == Genero.FEMININO && this.mapa.getConteudo(coordenada).contains("M")) {
                 if (this.estadoCivil == EstadoCivil.SOLTEIRO)
                     return coordenada;
-
             }
         }
         return null;
+    }
+
+    public void caminhar(){
+        if(destino == null){
+            caminharReto(); //caminhar de forma linear quando não tiver destino conforme especificado no enunciado
+        }
+        else {
+            if(encontrarDestino()){                                                     //se chegar ao destino
+                if(this.destino.isAteCandidato()){                                      //e este destino for um candidato
+                    ArrayList<Candidato> candidatos = this.mapa.getCandidatos();
+                    for (Candidato candidato: candidatos) {
+                        if(candidato.getPosicaoAtual().equals(destino.getDestinoFinal()))
+                            this.fazerProposta(candidato);                              //fazer proposta a este candidato
+                    }
+                }
+            }
+        }
+    }
+
+    //vai caminhar para a próxima casa do caminho até o destino, retornando true se encontrar o destino
+    public boolean encontrarDestino(){
+        for (int i = (this.destino.getCaminho().size() - 1); i > 0; i--) {
+            if(this.posicaoAtual.equals(this.destino.getCaminho().get(i))){
+                setPosicaoAtual(this.destino.getCaminho().get(i - 1));
+                if(i == 2)
+                    return true;
+                return false;
+            }
+        }
+        return false;
     }
 
     public void caminharReto(){
@@ -81,7 +135,7 @@ public class Candidato {
                     setPosicaoAtual(new Coordenada(x, y - 1));
                 else {
                     this.direcao = Direcao.DIREITA;
-                    setPosicaoAtual(new Coordenada(x, y - 1));
+                    setPosicaoAtual(new Coordenada(x, y + 1));
                 }
                 break;
             case DIREITA:
@@ -103,6 +157,26 @@ public class Candidato {
         if(!mapa.getConteudo(coordenada.getX(), coordenada.getY()).equals("_ "))
             return false;
         return true;
+    }
+
+    public ArrayList<Coordenada> caminhoAteCandidato(Coordenada coordenada){
+        int x = getPosicaoAtual().getX();
+        int y = getPosicaoAtual().getY();
+        int xC = coordenada.getX();
+        int yC = coordenada.getY();
+        if(this.getPosicaoAtual().getX() - xC == 2)
+            x = this.getPosicaoAtual().getX() - 1;
+        else if(this.getPosicaoAtual().getX() - xC == -2)
+            x = this.getPosicaoAtual().getX() + 1;
+        if(this.getPosicaoAtual().getY() - yC == 2)
+            y = this.getPosicaoAtual().getY() - 1;
+        else if(this.getPosicaoAtual().getY() - yC == -2)
+            y = this.getPosicaoAtual().getY() + 1;
+        ArrayList<Coordenada> coordenadas = new ArrayList<Coordenada>();
+        coordenadas.add(coordenada);
+        coordenadas.add(new Coordenada(x, y));
+        coordenadas.add(this.posicaoAtual);
+        return coordenadas;
     }
 
     //endregion
@@ -265,22 +339,28 @@ public class Candidato {
     public boolean aceitarProposta(Candidato candidato) {
         if (this.estadoCivil == EstadoCivil.SOLTEIRO
                 || preferencias.indexOf(candidato) > preferencias.indexOf(conjuge)) {
-            this.formarDivorcio();
+            if(conjuge != null)
+                this.formarDivorcio();
+            this.estadoCivil = EstadoCivil.NOIVADO;
+            this.conjuge = candidato;
+//          destino = fazer caminho ate cartorio usando a*
             return true;
         }
         return false;
     }
 
     public void fazerProposta(Candidato candidato) {
-        if (candidato.aceitarProposta(this)) {
-            this.formarDivorcio();
-//            caminharAteCartorio();
+        if(this.estadoCivil == EstadoCivil.SOLTEIRO
+                || preferencias.indexOf(candidato) > preferencias.indexOf(conjuge)){
+            if (candidato.aceitarProposta(this)) {
+                if(this.conjuge != null)
+                    this.formarDivorcio();
+                this.estadoCivil = EstadoCivil.NOIVADO;
+                this.conjuge = candidato;
+                System.out.println("PROPOSTA ACEITA!");
+//              destino = fazer caminho ate cartorio usando a*
+            }
         }
-    }
-
-    public void formarCasal(Candidato conjugue) {
-        this.conjuge = conjugue;
-        this.estadoCivil = EstadoCivil.NOIVADO;
     }
 
     public void formarDivorcio() {
@@ -296,11 +376,7 @@ public class Candidato {
     //endregion
 
     public void atualizarMapa(Coordenada posicaoAnterior){
-        try {
-            this.mapa.atualizarCandidato(this, posicaoAnterior);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        this.mapa.atualizarCandidato(this, posicaoAnterior);
     }
 
     //region Getters&Setters
@@ -350,6 +426,5 @@ public class Candidato {
     public Coordenada getPosicaoAtual() {
         return posicaoAtual;
     }
-
     //endregion
 }

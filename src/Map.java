@@ -2,10 +2,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Map {
-	public static final int MAP_COLUMNS = 20;
-	public static final int MAP_ROWS = 20;
+	private static final int MAP_COLUMNS = 20;
+	private static final int MAP_ROWS = 20;
 	private static String [][]mapa;
 	private ArrayList<Coordenada> cartorios; // guarda as coordenadas dos cartórios
+	private ArrayList<Candidato> candidatos;
+
 
 	public Map() {
 		this.mapa = new String[MAP_ROWS][MAP_COLUMNS];
@@ -30,10 +32,10 @@ public class Map {
 		return MAP_COLUMNS;
 	}
 	
-	public int getRows(){
-		return MAP_ROWS;
-	}
-	
+	public int getRows(){ return MAP_ROWS; }
+
+	public ArrayList<Candidato> getCandidatos() { return candidatos; }
+
 	public void gerarCartorios(int numCartorios){
 		Random random = new Random();
 		int x = random.nextInt(MAP_ROWS);
@@ -48,6 +50,7 @@ public class Map {
 	}
 
 	public void posicionarCandidatos(ArrayList<Candidato> candidatos){
+		this.candidatos = candidatos;
 		Random random = new Random();
 		int x = random.nextInt(MAP_ROWS);
 		int y = random.nextInt(MAP_COLUMNS);
@@ -82,7 +85,7 @@ public class Map {
 		System.out.println("========================================================================");
 	}
 
-	public void atualizarCandidato(Candidato candidato, Coordenada posicaoAnterior) throws InterruptedException {
+	public void atualizarCandidato(Candidato candidato, Coordenada posicaoAnterior) {
 		this.mapa[posicaoAnterior.getX()][posicaoAnterior.getY()] = "_ ";
 		addCadindato(candidato);
 	}
