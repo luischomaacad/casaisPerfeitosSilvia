@@ -30,14 +30,13 @@ public class App {
         map.gerarCartorios(configIniciais.getNumCartorios());
         map.posicionarCandidatos(candidatos);
         map.printMap();
+
+
         try {
             executarCiclo(candidatos, map);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //candidatos.add(teste);
-        //map.posicionarCandidatos(candidatos);
-//        map.printMap();
 //        ArrayList<Coordenada> te = teste.getVizinhos(15, 15);
 //        for (int i = 0; i < te.size(); i++) {
 //            System.out.println(te.get(i).getX() + "," + te.get(i).getY());
