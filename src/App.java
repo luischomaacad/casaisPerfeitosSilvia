@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -28,7 +29,6 @@ public class App {
         map.posicionarCandidatos(candidatos);
         map.printMap();
 
-
         try {
             executarCiclo(candidatos, map);
         } catch (InterruptedException e) {
@@ -37,12 +37,26 @@ public class App {
     }
 
     public static void executarCiclo(ArrayList<Candidato> candidatos, Map map) throws InterruptedException {
-        for(int x = 0; x <= 30; x++) {
-            for (Candidato candidato: candidatos) {
+        boolean parada = true;
+        int iteracao = 0;
+        int limiteDeIteracao = 30;
+        int limiteQualidade = 4;
+        while (parada) {
+            for (Candidato candidato : candidatos) {
                 //Thread.currentThread().sleep(500);
                 candidato.acao();
                 map.printMap();
 
+            }
+             //map.printMap();
+             if(map.qualidadeCasais() == limiteQualidade){
+              parada = true;
+              System.out.println("Parei pela qualidade dos casais estipulada(" + limiteQualidade +")");
+             }
+             iteracao = iteracao + 1;
+            if (iteracao == limiteDeIteracao) {
+                parada = false;
+                System.out.println("Parei pelo número de iterações que foi " + iteracao + " iterações.");
             }
 
         }
