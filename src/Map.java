@@ -93,6 +93,7 @@ public class Map {
         System.out.println("========================================================================");
     }
 
+
     public void atualizarCandidato(Candidato candidato, Coordenada posicaoAnterior) {
         this.mapa[posicaoAnterior.getX()][posicaoAnterior.getY()] = ESPACO_VAZIO;
         addCadindato(candidato);

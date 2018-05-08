@@ -509,6 +509,7 @@ public class Candidato {
                 || preferencias.indexOf(candidato.getId()) < preferencias.indexOf(conjuge.getId())) {
             if (conjuge != null) {
                 this.conjuge.setEstadoCivil(EstadoCivil.SOLTEIRO);
+                numeroDeDivorcios++;
             }
             this.estadoCivil = EstadoCivil.NOIVADO;
             this.conjuge = candidato;
@@ -541,11 +542,6 @@ public class Candidato {
     }
 
 
-    public void formarDivorcio() {
-        this.estadoCivil = EstadoCivil.DIVORCIO;
-        this.conjuge.setEstadoCivil(EstadoCivil.DIVORCIO);
-        numeroDeDivorcios++;
-    }
 
     //endregion
     private void atualizarMapa(Coordenada posicaoAnterior) {
