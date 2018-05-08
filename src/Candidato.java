@@ -80,11 +80,10 @@ public class Candidato {
         if (coordenada != null) {
             if (this.estadoCivil == EstadoCivil.SOLTEIRO) {
                 System.out.println("ENCONTROU ALGUEM");
-                this.destino = new Destino(this.caminhoAteCandidato(coordenada), true, false);
                 this.setDestino(new Destino(this.caminhoAteCandidato(coordenada), true, false));
             } else {
                 Candidato candidato = this.obterCandidato(coordenada);
-                if (preferencias.indexOf(candidato) > preferencias.indexOf(conjuge)) {
+                if (preferencias.indexOf(candidato.getId()) < preferencias.indexOf(conjuge.getId())) {
                     System.out.println("ENCONTROU ALGUEM");
                     this.setDestino(new Destino(this.caminhoAteCandidato(coordenada), true, false));
                 }
@@ -98,9 +97,8 @@ public class Candidato {
         for (Coordenada coordenada : coordenadas) {
             if (this.genero == Genero.MASCULINO && this.mapa.getConteudo(coordenada).contains("F")
                     || this.genero == Genero.FEMININO && this.mapa.getConteudo(coordenada).contains("M")) {
-                if (this.estadoCivil == EstadoCivil.SOLTEIRO) {
+                if(this.conjuge == null || this.conjuge.getPosicaoAtual() == coordenada)
                     return coordenada;
-                }
             }
         }
         return null;
@@ -470,17 +468,9 @@ public class Candidato {
 
     //endregion
     //region Relacao Com Agentes
-    public void verificarCandidato(Candidato candidato) {
-        if (preferencias.indexOf(candidato) > preferencias.indexOf(conjuge)
-                || this.estadoCivil == EstadoCivil.SOLTEIRO) {
-//            caminharAteCandidato(candidato);
-        }
-    }
-
-    // private caminharAteCandidato(candidato c){}
     public boolean aceitarProposta(Candidato candidato) {
         if (this.estadoCivil == EstadoCivil.SOLTEIRO
-                || preferencias.indexOf(candidato) > preferencias.indexOf(conjuge)) {
+                || preferencias.indexOf(candidato.getId()) < preferencias.indexOf(conjuge.getId())) {
             if (conjuge != null) {
                 this.formarDivorcio();
             }
@@ -492,23 +482,24 @@ public class Candidato {
     }
 
     public void fazerProposta(Candidato candidato) {
-        if (this.estadoCivil == EstadoCivil.SOLTEIRO
-                || preferencias.indexOf(candidato) > preferencias.indexOf(conjuge)) {
-            if (candidato.aceitarProposta(this)) {
-                if (this.conjuge != null) {
-                    this.formarDivorcio();
+        if(candidato != null){
+            if (this.estadoCivil == EstadoCivil.SOLTEIRO
+                    || preferencias.indexOf(candidato.getId()) < preferencias.indexOf(conjuge.getId())) {
+                if (candidato.aceitarProposta(this)) {
+                    if (this.conjuge != null) {
+                        this.formarDivorcio();
+                    }
+                    this.estadoCivil = EstadoCivil.NOIVADO;
+                    this.conjuge = candidato;
+                    System.out.println("PROPOSTA ACEITA!");
+                    System.out.println(this.genero + "" + this.id + " pediu para casar com " + this.conjuge.getGenero() + this.conjuge.getId());
+                    this.caminhoAEstrela();
+                    //choma
+                } else if (this.estadoCivil == EstadoCivil.NOIVADO || this.estadoCivil == EstadoCivil.DIVORCIO) { //quando o usuário faz proposta para outro e é recusado, ele deve redefinir seu destino
+                    this.caminhoAEstrela();
+                } else { //caso não estava indo ao cartório, setar destino como null para voltar a andar linearmente
+                    this.destino = null;
                 }
-                this.estadoCivil = EstadoCivil.NOIVADO;
-                this.conjuge = candidato;
-                System.out.println("PROPOSTA ACEITA!");
-                System.out.println(this.genero + "" + this.id + " pediu para casar com " + this.conjuge.getId());
-                this.caminhoAEstrela();
-                //choma
-
-            } else if (this.estadoCivil == EstadoCivil.NOIVADO || this.estadoCivil == EstadoCivil.DIVORCIO) { //quando o usuário faz proposta para outro e é recusado, ele deve redefinir seu destino
-                this.caminhoAEstrela();
-            } else { //caso não estava indo ao cartório, setar destino como null para voltar a andar linearmente
-                this.destino = null;
             }
         }
     }
@@ -527,6 +518,8 @@ public class Candidato {
         ArrayList<Candidato> candidatos = this.mapa.getCandidatos();
         for (Candidato candidato : candidatos) {
             if (candidato.getPosicaoAtual().equals(coordenada)) {
+                if(candidato.getGenero() == this.genero)
+                    return candidato.getConjugue();
                 return candidato;
             }
         }
