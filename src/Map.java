@@ -71,7 +71,7 @@ public class Map {
 	}
 
 	public void addParedes(int x, int y){
-		if((mapa[x][y].equalsIgnoreCase(ESPACO_VAZIO))){ // . = nada
+		if((mapa[x][y].equalsIgnoreCase(ESPACO_VAZIO))){
 			mapa[x][y] = "@@@@";
 		}
 	}
@@ -92,8 +92,19 @@ public class Map {
 	}
 
 	private void addCadindato(Candidato c) {
+                if(c.getEstadoCivil() == EstadoCivil.CASADO){
+                    String genero = c.getGenero() == Genero.MASCULINO ? "M" : "F";
+                    if(genero.equals("M")){
+                        String f = c.getConjugue().getGenero() == Genero.FEMININO ? "F" : "M";
+                        mapa[c.getPosicaoAtual().getX()][c.getPosicaoAtual().getY()] = f + c.getConjugue().getId() + genero + c.getId() + ""; 
+                    }else{
+                        String m = c.getConjugue().getGenero() == Genero.FEMININO ? "F" : "M";
+                        mapa[c.getPosicaoAtual().getX()][c.getPosicaoAtual().getY()] = genero + c.getId() +  m + c.getConjugue().getId() + ""; 
+                    }
+                }else{
 		String genero = c.getGenero() == Genero.MASCULINO ? "M" : "F";
-		mapa[c.getPosicaoAtual().getX()][c.getPosicaoAtual().getY()] = genero + c.getId() + "  ";
+		mapa[c.getPosicaoAtual().getX()][c.getPosicaoAtual().getY()] = genero + c.getId() + "  ";                    
+                }
 	}
 
 	private void addCartorio(int x, int y){

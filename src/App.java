@@ -16,14 +16,14 @@ public class App {
         Map map = new Map();
         map.initialize();
         ArrayList<Candidato> candidatos = configIniciais.getCandidato();
-//        map.addParedes(1, 1);
-//        map.addParedes(1, 2);
-//        map.addParedes(1, 3);
-//        map.addParedes(10, 1);
-//        map.addParedes(8, 1);
-//        map.addParedes(5, 1);
-//        map.addParedes(7, 7);
-//        map.addParedes(7, 8);
+        map.addParedes(1, 1);
+        map.addParedes(1, 2);
+        map.addParedes(1, 3);
+        map.addParedes(10, 1);
+        map.addParedes(8, 1);
+        map.addParedes(5, 1);
+        map.addParedes(7, 7);
+        map.addParedes(7, 8);
         map.gerarCartorios(configIniciais.getNumCartorios());
         map.posicionarCandidatos(candidatos);
         map.printMap();
@@ -34,14 +34,6 @@ public class App {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        ArrayList<Coordenada> te = teste.getVizinhos(15, 15);
-//        for (int i = 0; i < te.size(); i++) {
-//            System.out.println(te.get(i).getX() + "," + te.get(i).getY());
-//        }
-//        ArrayList<Coordenada> t = candidatos.get(0).caminhoAEstrela(new Coordenada(1, 10));
-//        for (int i = 0; i < t.size(); i++) {
-//            System.out.println(t.get(i).getX() + "," + t.get(i).getY());
-//        }
     }
 
     public static void executarCiclo(ArrayList<Candidato> candidatos, Map map) throws InterruptedException {
