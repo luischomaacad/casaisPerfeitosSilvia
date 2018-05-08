@@ -173,7 +173,7 @@ public class Candidato {
         if (coordenada.getX() >= this.mapa.getRows() || coordenada.getX() < 0) {
             return false;
         }
-        if (!mapa.getConteudo(coordenada.getX(), coordenada.getY()).equals("_   ")) {
+        if (!mapa.getConteudo(coordenada.getX(), coordenada.getY()).equals(Map.ESPACO_VAZIO)) {
             return false;
         }
         return true;
@@ -218,7 +218,7 @@ public class Candidato {
                     if (ya >= 0 && ya < mapa.getColumns()) { // Vejo se não está fora do tabuleiro
                         //System.out.println("entrei no ya " + ya);
                         //System.out.println("Conteudo " + mapa.getConteudo(xa, ya) + "| ");
-                        if (!mapa.getConteudo(xa, ya).equals("@   ")) { // Se o campo que eu estou olhando não é uma parede
+                        if (!mapa.getConteudo(xa, ya).equals("@ ")) { // Se o campo que eu estou olhando não é uma parede
                             if (!(x == xa && y == ya)) { // Se for a propria posicao de entrada, entao nao pode colocar como vizinho
                                 Coordenada c = new Coordenada(xa, ya);
                                 viz.add(c);

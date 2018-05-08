@@ -4,6 +4,7 @@ import java.util.Random;
 public class Map {
 	private static final int MAP_COLUMNS = 20;
 	private static final int MAP_ROWS = 20;
+	public static final String ESPACO_VAZIO = "_   ";
 	private static String [][]mapa;
 	private ArrayList<Coordenada> cartorios; // guarda as coordenadas dos cartórios
 	private ArrayList<Candidato> candidatos;
@@ -17,21 +18,21 @@ public class Map {
 	public static void initialize() {
 		for(int i = 0; i<MAP_ROWS; i++) {
 			for(int j = 0; j<MAP_COLUMNS; j++) {
-				mapa[i][j] = "_   ";
+				mapa[i][j] = ESPACO_VAZIO;
 			}
 		}
 	}
-	
+
 	public String getConteudo(int x, int y){
             return mapa[x][y];
         }
 
 	public String getConteudo(Coordenada c){ return mapa[c.getX()][c.getY()]; }
-        
+
 	public int getColumns(){
 		return MAP_COLUMNS;
 	}
-	
+
 	public int getRows(){ return MAP_ROWS; }
 
 	public ArrayList<Candidato> getCandidatos() { return candidatos; }
@@ -55,7 +56,7 @@ public class Map {
 		int x = random.nextInt(MAP_ROWS);
 		int y = random.nextInt(MAP_COLUMNS);
 		for (Candidato candidato: candidatos) {
-			while(!mapa[x][y].equalsIgnoreCase("_   ")){
+			while(!mapa[x][y].equalsIgnoreCase(ESPACO_VAZIO)){
 				x = random.nextInt(MAP_ROWS);
 				y = random.nextInt(MAP_COLUMNS);
 			}
@@ -70,8 +71,8 @@ public class Map {
 	}
 
 	public void addParedes(int x, int y){
-		if((mapa[x][y].equalsIgnoreCase("_   "))){ // . = nada
-			mapa[x][y] = "@   ";
+		if((mapa[x][y].equalsIgnoreCase(ESPACO_VAZIO))){ // . = nada
+			mapa[x][y] = "@@@@";
 		}
 	}
 
@@ -86,13 +87,13 @@ public class Map {
 	}
 
 	public void atualizarCandidato(Candidato candidato, Coordenada posicaoAnterior) {
-		this.mapa[posicaoAnterior.getX()][posicaoAnterior.getY()] = "_   ";
+		this.mapa[posicaoAnterior.getX()][posicaoAnterior.getY()] = ESPACO_VAZIO;
 		addCadindato(candidato);
 	}
 
 	private void addCadindato(Candidato c) {
 		String genero = c.getGenero() == Genero.MASCULINO ? "M" : "F";
-		mapa[c.getPosicaoAtual().getX()][c.getPosicaoAtual().getY()] = genero + c.getId() + "  ";;
+		mapa[c.getPosicaoAtual().getX()][c.getPosicaoAtual().getY()] = genero + c.getId() + "  ";
 	}
 
 	private void addCartorio(int x, int y){
@@ -102,16 +103,16 @@ public class Map {
 	}
 
 	private boolean lugarValidoCartorio(int x, int y){
-		if(!mapa[x][y].equalsIgnoreCase("_   ")){
+		if(!mapa[x][y].equalsIgnoreCase(ESPACO_VAZIO)){
 			return false;
 		}
-		if((x + 1) != MAP_ROWS && mapa[x + 1][y].equals("@   "))
+		if((x + 1) != MAP_ROWS && mapa[x + 1][y].equals("@@@@"))
 			return true;
-		if(x != 0 && mapa[x - 1][y].equals("@   "))
+		if(x != 0 && mapa[x - 1][y].equals("@@@@"))
 			return true;
-		if((y + 1) != MAP_COLUMNS && mapa[x][y + 1].equals("@   "))
+		if((y + 1) != MAP_COLUMNS && mapa[x][y + 1].equals("@@@@"))
 			return true;
-		if(y != 0 && mapa[x][y - 1].equals("@   "))
+		if(y != 0 && mapa[x][y - 1].equals("@@@@"))
 			return true;
 		return false;
 	}
