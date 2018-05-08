@@ -173,7 +173,7 @@ public class Candidato {
         if (coordenada.getX() >= this.mapa.getRows() || coordenada.getX() < 0) {
             return false;
         }
-        if (!mapa.getConteudo(coordenada.getX(), coordenada.getY()).equals("_ ")) {
+        if (!mapa.getConteudo(coordenada.getX(), coordenada.getY()).equals(Map.ESPACO_VAZIO)) {
             return false;
         }
         return true;
