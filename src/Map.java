@@ -106,15 +106,16 @@ public class Map {
 		if(!mapa[x][y].equalsIgnoreCase(ESPACO_VAZIO)){
 			return false;
 		}
-		if((x + 1) != MAP_ROWS && mapa[x + 1][y].equals("@@@@"))
-			return true;
-		if(x != 0 && mapa[x - 1][y].equals("@@@@"))
-			return true;
-		if((y + 1) != MAP_COLUMNS && mapa[x][y + 1].equals("@@@@"))
-			return true;
-		if(y != 0 && mapa[x][y - 1].equals("@@@@"))
-			return true;
-		return false;
+//		if((x + 1) != MAP_ROWS && mapa[x + 1][y].equals("@@@@"))
+//			return true;
+//		if(x != 0 && mapa[x - 1][y].equals("@@@@"))
+//			return true;
+//		if((y + 1) != MAP_COLUMNS && mapa[x][y + 1].equals("@@@@"))
+//			return true;
+//		if(y != 0 && mapa[x][y - 1].equals("@@@@"))
+//			return true;
+//		return false;
+        return true;
 	}
 	
 }
