@@ -2,10 +2,11 @@ public class Coordenada {
     private int x;
     private int y;
 
-    public Coordenada(int nx, int ny){
+    public Coordenada(int nx, int ny) {
         x = nx;
         y = ny;
     }
+
     public int getX() {
         return x;
     }
@@ -24,7 +25,7 @@ public class Coordenada {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Coordenada){
+        if (obj instanceof Coordenada) {
             Coordenada coordenada = (Coordenada) obj;
             return this.x == coordenada.getX() && this.y == coordenada.getY();
         }

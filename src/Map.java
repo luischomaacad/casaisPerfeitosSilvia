@@ -17,7 +17,7 @@ public class Map {
 	public static void initialize() {
 		for(int i = 0; i<MAP_ROWS; i++) {
 			for(int j = 0; j<MAP_COLUMNS; j++) {
-				mapa[i][j] = "_ ";
+				mapa[i][j] = "_   ";
 			}
 		}
 	}
@@ -55,7 +55,7 @@ public class Map {
 		int x = random.nextInt(MAP_ROWS);
 		int y = random.nextInt(MAP_COLUMNS);
 		for (Candidato candidato: candidatos) {
-			while(!mapa[x][y].equalsIgnoreCase("_ ")){
+			while(!mapa[x][y].equalsIgnoreCase("_   ")){
 				x = random.nextInt(MAP_ROWS);
 				y = random.nextInt(MAP_COLUMNS);
 			}
@@ -70,8 +70,8 @@ public class Map {
 	}
 
 	public void addParedes(int x, int y){
-		if((mapa[x][y].equalsIgnoreCase("_ "))){ // . = nada
-			mapa[x][y] = "@ ";
+		if((mapa[x][y].equalsIgnoreCase("_   "))){ // . = nada
+			mapa[x][y] = "@   ";
 		}
 	}
 
@@ -86,32 +86,32 @@ public class Map {
 	}
 
 	public void atualizarCandidato(Candidato candidato, Coordenada posicaoAnterior) {
-		this.mapa[posicaoAnterior.getX()][posicaoAnterior.getY()] = "_ ";
+		this.mapa[posicaoAnterior.getX()][posicaoAnterior.getY()] = "_   ";
 		addCadindato(candidato);
 	}
 
 	private void addCadindato(Candidato c) {
 		String genero = c.getGenero() == Genero.MASCULINO ? "M" : "F";
-		mapa[c.getPosicaoAtual().getX()][c.getPosicaoAtual().getY()] = genero + c.getId();;
+		mapa[c.getPosicaoAtual().getX()][c.getPosicaoAtual().getY()] = genero + c.getId() + "  ";;
 	}
 
 	private void addCartorio(int x, int y){
-		mapa[x][y] = "C ";
+		mapa[x][y] = "C   ";
 		Coordenada c = new Coordenada(x,y);
 		cartorios.add(c);
 	}
 
 	private boolean lugarValidoCartorio(int x, int y){
-		if(!mapa[x][y].equalsIgnoreCase("_ ")){
+		if(!mapa[x][y].equalsIgnoreCase("_   ")){
 			return false;
 		}
-		if((x + 1) != MAP_ROWS && mapa[x + 1][y].equals("@ "))
+		if((x + 1) != MAP_ROWS && mapa[x + 1][y].equals("@   "))
 			return true;
-		if(x != 0 && mapa[x - 1][y].equals("@ "))
+		if(x != 0 && mapa[x - 1][y].equals("@   "))
 			return true;
-		if((y + 1) != MAP_COLUMNS && mapa[x][y + 1].equals("@ "))
+		if((y + 1) != MAP_COLUMNS && mapa[x][y + 1].equals("@   "))
 			return true;
-		if(y != 0 && mapa[x][y - 1].equals("@ "))
+		if(y != 0 && mapa[x][y - 1].equals("@   "))
 			return true;
 		return false;
 	}
