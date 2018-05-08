@@ -49,11 +49,9 @@ public class App {
             for (Candidato candidato : candidatos) {
                 candidato.acao();
             }
-            for(int limpaTela = 0; limpaTela < 3; limpaTela++){
-                System.out.println("\n\n\n\n\n\n");
-            }
             Thread.currentThread().sleep(1000);
             map.printMap();
+            System.out.println("\n");
 
              if(map.qualidadeCasais() == limiteQualidade){
               parada = true;
