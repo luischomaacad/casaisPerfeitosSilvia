@@ -47,14 +47,14 @@ public class App {
         int limiteQualidade = 4;
         while (parada) {
             for (Candidato candidato : candidatos) {
-
-                Thread.currentThread().sleep(500);
-
                 candidato.acao();
             }
-            map.printMap();
+            for(int limpaTela = 0; limpaTela < 3; limpaTela++){
+                System.out.println("\n\n\n\n\n\n");
+            }
             Thread.currentThread().sleep(1000);
-             //map.printMap();
+            map.printMap();
+
              if(map.qualidadeCasais() == limiteQualidade){
               parada = true;
               System.out.println("Parei pela qualidade dos casais estipulada(" + limiteQualidade +")");
