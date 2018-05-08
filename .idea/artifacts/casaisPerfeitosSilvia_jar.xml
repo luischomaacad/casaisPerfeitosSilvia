@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="casaisPerfeitosSilvia:jar">
+    <output-path>$PROJECT_DIR$/classes/artifacts/casaisPerfeitosSilvia_jar</output-path>
+    <root id="archive" name="casaisPerfeitosSilvia.jar">
+      <element id="module-output" name="casaisPerfeitosSilvia" />
+    </root>
+  </artifact>
+</component>
