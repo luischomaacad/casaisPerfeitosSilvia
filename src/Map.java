@@ -153,8 +153,8 @@ public class Map {
     public int qualidadeCasais() {
         int retorno = 0;
         for (Candidato candidato : candidatos) {
-            if(candidato.getEstadoCivil() == EstadoCivil.CASADO){
-                if(candidato.getPreferencias().get(0) == candidato.getConjugue().getId()){
+            if (candidato.getEstadoCivil() == EstadoCivil.CASADO) {
+                if (candidato.getPreferencias().get(0) == candidato.getConjugue().getId()) {
                     retorno = retorno + 1;
                 }
             }

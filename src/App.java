@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class App {
 
     public static void main(String[] args) {
+        double startTime = System.currentTimeMillis();
         ConfigIniciais configIniciais = new ConfigIniciais();
         try {
             configIniciais = Leitor.lerArquivo("teste.txt");
@@ -34,6 +35,9 @@ public class App {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        double endTime = System.currentTimeMillis();
+        System.out.println("A execuçao levou " + (endTime - startTime)/1000 + " segundos");
+
     }
 
     public static void executarCiclo(ArrayList<Candidato> candidatos, Map map) throws InterruptedException {
@@ -43,6 +47,9 @@ public class App {
         int limiteQualidade = 4;
         while (parada) {
             for (Candidato candidato : candidatos) {
+
+                Thread.currentThread().sleep(500);
+
                 candidato.acao();
             }
             map.printMap();
@@ -51,13 +58,19 @@ public class App {
              if(map.qualidadeCasais() == limiteQualidade){
               parada = true;
               System.out.println("Parei pela qualidade dos casais estipulada(" + limiteQualidade +")");
+              Candidato.printFinal();
              }
              iteracao = iteracao + 1;
             if (iteracao == limiteDeIteracao) {
                 parada = false;
                 System.out.println("Parei pelo número de iterações que foi " + iteracao + " iterações.");
+                Candidato.printFinal();
             }
 
         }
+
     }
+
+
+
 }
