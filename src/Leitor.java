@@ -19,6 +19,7 @@ public class Leitor {
         configIniciais.setNumCasais(scanner.nextInt());
         configIniciais.setNumCartorios(scanner.nextInt());
         popularCandidatos(Genero.MASCULINO, configIniciais, bufferReader);
+        currentLine = bufferReader.readLine();
         popularCandidatos(Genero.FEMININO, configIniciais, bufferReader);
         reader.close();
         bufferReader.close();

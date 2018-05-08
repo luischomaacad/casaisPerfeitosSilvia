@@ -36,8 +36,28 @@ public class App {
             e.printStackTrace();
         }
         double endTime = System.currentTimeMillis();
-        System.out.println("A execuçao levou " + (endTime - startTime)/1000 + " segundos");
+        System.out.println("A execuçao levou " + (endTime - startTime) / 1000 + " segundos");
 
+    }
+
+    public static void printCasais(Map map) {
+        ArrayList<Candidato> c = map.getCandidatos();
+        System.out.println("Os casais que foram formados são: (Os casais marcados com B do lado são os melhores casais)");
+        System.out.print("{");
+        for (int i = 0; i < c.size(); i++) {
+            if (c.get(i).getEstadoCivil() == EstadoCivil.CASADO) {
+                if (!(map.getConteudo(c.get(i).getPosicaoAtual().getX(), c.get(i).getPosicaoAtual().getY()).equals("_     "))) {
+                    System.out.print("(" + map.getConteudo(c.get(i).getPosicaoAtual().getX(), c.get(i).getPosicaoAtual().getY()) + ")");
+                    if (c.get(i).getPreferencias().get(0) == c.get(i).getConjugue().getId()) {
+                        System.out.print("B,");
+                    } else {
+                        System.out.print(",");
+                    }
+                }
+            }
+        }
+        System.out.print("}");
+        System.out.println("");
     }
 
     public static void executarCiclo(ArrayList<Candidato> candidatos, Map map) throws InterruptedException {
@@ -53,22 +73,22 @@ public class App {
             map.printMap();
             System.out.println("\n");
 
-             if(map.qualidadeCasais() == limiteQualidade){
-              parada = true;
-              System.out.println("Parei pela qualidade dos casais estipulada(" + limiteQualidade +")");
-              Candidato.printFinal();
-             }
-             iteracao = iteracao + 1;
+            if (map.qualidadeCasais() == limiteQualidade) {
+                parada = true;
+                System.out.println("Parei pela qualidade dos casais estipulada(" + limiteQualidade + ")");
+                Candidato.printFinal();
+                printCasais(map);
+            }
+            iteracao = iteracao + 1;
             if (iteracao == limiteDeIteracao) {
                 parada = false;
                 System.out.println("Parei pelo número de iterações que foi " + iteracao + " iterações.");
                 Candidato.printFinal();
+                printCasais(map);
             }
 
         }
 
     }
-
-
 
 }
