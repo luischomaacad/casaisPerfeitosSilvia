@@ -69,7 +69,7 @@ public class App {
             for (Candidato candidato : candidatos) {
                 candidato.acao();
             }
-            Thread.currentThread().sleep(1000);
+            //Thread.currentThread().sleep(1000);
             map.printMap();
             System.out.println("\n");
 
