@@ -67,17 +67,23 @@ public class Candidato {
     }
     
     public void acao() {
-        if (this.destino == null && this.estadoCivil == EstadoCivil.SOLTEIRO) {
-            procurarCandidatos(); //procura candidatos próximos e, se achar, define ele como seu destino
-        }
+        procurarCandidatos(); //procura candidatos próximos e, se achar, define ele como seu destino
         caminhar();
     }
 
     public void procurarCandidatos() {
         Coordenada coordenada = existeCandidatosProximos();
         if (coordenada != null) {
-            System.out.println("ENCONTROU ALGUEM");
-            this.destino = new Destino(this.caminhoAteCandidato(coordenada), true, false);
+            if(this.estadoCivil == EstadoCivil.SOLTEIRO) {
+                System.out.println("ENCONTROU ALGUEM");
+                this.destino = new Destino(this.caminhoAteCandidato(coordenada), true, false);
+            } else {
+                Candidato candidato = this.obterCandidato(coordenada);
+                if (preferencias.indexOf(candidato) > preferencias.indexOf(conjuge)){
+                    System.out.println("ENCONTROU ALGUEM");
+                    this.destino = new Destino(this.caminhoAteCandidato(coordenada), true, false);
+                }
+            }
         }
     }
 
@@ -101,12 +107,7 @@ public class Candidato {
         } else {
             if (encontrarDestino()) {                                                     //se chegar ao destino
                 if (this.destino.isAteCandidato()) {                                      //e este destino for um candidato
-                    ArrayList<Candidato> candidatos = this.mapa.getCandidatos();
-                    for (Candidato candidato : candidatos) {
-                        if (candidato.getPosicaoAtual().equals(destino.getDestinoFinal())) {
-                            this.fazerProposta(candidato);                              //fazer proposta a este candidato
-                        }
-                    }
+                    this.fazerProposta(this.obterCandidato(this.destino.getDestinoFinal()));
                 }
             }
         }
@@ -398,6 +399,11 @@ public class Candidato {
                 System.out.println("PROPOSTA ACEITA!");
 //              destino = fazer caminho ate cartorio usando a*
             }
+            else if(this.estadoCivil == EstadoCivil.NOIVADO || this.estadoCivil == EstadoCivil.DIVORCIO) { //quando o usuário faz proposta para outro e é recusado, ele deve redefinir seu destino
+                //destino = fazer caminho ate cartorio usando a*
+            } else { //caso não estava indo ao cartório, setar destino como null para voltar a andar linearmente
+                this.destino = null;
+            }
         }
     }
 
@@ -412,8 +418,18 @@ public class Candidato {
     }
 
     //endregion
-    public void atualizarMapa(Coordenada posicaoAnterior) {
+    private void atualizarMapa(Coordenada posicaoAnterior) {
         this.mapa.atualizarCandidato(this, posicaoAnterior);
+    }
+
+    private Candidato obterCandidato(Coordenada coordenada){
+        ArrayList<Candidato> candidatos = this.mapa.getCandidatos();
+        for (Candidato candidato : candidatos) {
+            if (candidato.getPosicaoAtual().equals(coordenada)) {
+                return candidato;
+            }
+        }
+        return null;
     }
 
     //region Getters&Setters
