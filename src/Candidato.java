@@ -80,12 +80,17 @@ public class Candidato {
         if (coordenada != null) {
             if (this.estadoCivil == EstadoCivil.SOLTEIRO) {
                 System.out.println("ENCONTROU ALGUEM");
-                this.setDestino(new Destino(this.caminhoAteCandidato(coordenada), true, false));
+                ArrayList<Coordenada> caminhoDestino = this.caminhoAteCandidato(coordenada);
+                if(caminhoDestino != null)
+                    this.setDestino(new Destino(caminhoDestino, true, false));
             } else {
                 Candidato candidato = this.obterCandidato(coordenada);
                 if (preferencias.indexOf(candidato.getId()) < preferencias.indexOf(conjuge.getId())) {
                     System.out.println("ENCONTROU ALGUEM");
-                    this.setDestino(new Destino(this.caminhoAteCandidato(coordenada), true, false));
+                    ArrayList<Coordenada> caminhoDestino = this.caminhoAteCandidato(coordenada);
+                    //quando tiver um candidato por perto, mas obstáculo no caminho impedindo o encontro, retornará null
+                    if(caminhoDestino != null)
+                        this.setDestino(new Destino(caminhoDestino, true, false));
                 }
             }
         }
@@ -112,7 +117,7 @@ public class Candidato {
          * homem, posicaoAtual = this.conjuge.posicaoAtual; // vai para a mesma
          * casa da mulher
          */
-        if (this.estadoCivil.equals(estadoCivil.CASADO)){
+        if (this.estadoCivil.equals(estadoCivil.CASADO) && this.destino == null){
             
             if (this.genero.equals(genero.FEMININO)) {
                 caminharReto();
@@ -243,11 +248,14 @@ public class Candidato {
         } else if (this.getPosicaoAtual().getY() - yC == -2) {
             y = this.getPosicaoAtual().getY() + 1;
         }
-        ArrayList<Coordenada> coordenadas = new ArrayList<Coordenada>();
-        coordenadas.add(coordenada);
-        coordenadas.add(new Coordenada(x, y));
-        coordenadas.add(this.posicaoAtual);
-        return coordenadas;
+        if(mapa.getConteudo(x, y).contains(mapa.ESPACO_VAZIO)) {
+            ArrayList<Coordenada> coordenadas = new ArrayList<Coordenada>();
+            coordenadas.add(coordenada);
+            coordenadas.add(new Coordenada(x, y));
+            coordenadas.add(this.posicaoAtual);
+            return coordenadas;
+        }
+        return null;
     }
 
     //endregion
