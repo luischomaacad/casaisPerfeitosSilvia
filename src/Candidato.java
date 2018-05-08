@@ -28,7 +28,10 @@ public class Candidato {
     public void initialize(Map mapa) {
         this.mapa = mapa;
         this.estadoCivil = EstadoCivil.SOLTEIRO;
-        this.direcao = Direcao.getDirecaoAleatoria();
+        if(this.genero == Genero.FEMININO)
+            this.direcao = Direcao.getDirecaoHorizontalAleatoria();
+        else
+            this.direcao = Direcao.getDirecaoVerticalAleatoria();
     }
 
     //region CAMINHAMENTO
@@ -143,7 +146,6 @@ public class Candidato {
     public boolean encontrarDestino() {
         for (int i = (this.destino.getCaminho().size() - 1); i > 0; i--) {
             if (this.posicaoAtual.equals(this.destino.getCaminho().get(i))) {
-                
                 if (verificarCoordenada(this.destino.getCaminho().get(i - 1))) { // verifica se posso ir para aquele caminho
                     setPosicaoAtual(this.destino.getCaminho().get(i - 1));
                 }else{
@@ -168,13 +170,13 @@ public class Candidato {
         ArrayList<Coordenada> vizinhosCartorio = this.getVizinhos(cartorio.getX(), cartorio.getY(), 1);
         ArrayList<Coordenada> vizinhosAtual = this.getVizinhos(this.posicaoAtual.getX(), this.posicaoAtual.getY(), 1);
         for(int i = 0; i < vizinhosCartorio.size();i++){
-            
+
             for (int j = 0; j < vizinhosAtual.size(); j++) {
                 if(vizinhosCartorio.get(i).equals(vizinhosAtual.get(j))){
                     if(this.verificarCoordenada(vizinhosAtual.get(j))){
                         return vizinhosAtual.get(j);
                     }
-                        
+
                 }
             }
         }
@@ -480,7 +482,7 @@ public class Candidato {
         if (this.estadoCivil == EstadoCivil.SOLTEIRO
                 || preferencias.indexOf(candidato.getId()) < preferencias.indexOf(conjuge.getId())) {
             if (conjuge != null) {
-                this.formarDivorcio();
+                this.conjuge.setEstadoCivil(EstadoCivil.SOLTEIRO);
             }
             this.estadoCivil = EstadoCivil.NOIVADO;
             this.conjuge = candidato;
@@ -495,7 +497,7 @@ public class Candidato {
                     || preferencias.indexOf(candidato.getId()) < preferencias.indexOf(conjuge.getId())) {
                 if (candidato.aceitarProposta(this)) {
                     if (this.conjuge != null) {
-                        this.formarDivorcio();
+                        this.conjuge.setEstadoCivil(EstadoCivil.SOLTEIRO);
                     }
                     this.estadoCivil = EstadoCivil.NOIVADO;
                     this.conjuge = candidato;
@@ -510,11 +512,6 @@ public class Candidato {
                 }
             }
         }
-    }
-
-    public void formarDivorcio() {
-        this.estadoCivil = EstadoCivil.DIVORCIO;
-        this.conjuge.setEstadoCivil(EstadoCivil.DIVORCIO);
     }
 
     //endregion

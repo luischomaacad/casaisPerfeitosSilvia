@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class Map {
 
-    private static final int MAP_COLUMNS = 20;
-    private static final int MAP_ROWS = 20;
+    private static final int MAP_COLUMNS = 12;
+    private static final int MAP_ROWS = 12;
     public static final String ESPACO_VAZIO = "_     ";
     private static String[][] mapa;
     private ArrayList<Coordenada> cartorios; // guarda as coordenadas dos cartórios

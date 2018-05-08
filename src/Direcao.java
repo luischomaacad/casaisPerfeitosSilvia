@@ -8,7 +8,12 @@ public enum Direcao {
     private static final int SIZE = VALUES.length;
     private static final Random RANDOM = new Random();
 
-    public static Direcao getDirecaoAleatoria()  {
-        return VALUES[RANDOM.nextInt(SIZE)];
+    public static Direcao getDirecaoHorizontalAleatoria()  {
+        return VALUES[(int) ( Math.random() * 2 + 2)];
     }
+
+    public static Direcao getDirecaoVerticalAleatoria()  {
+        return VALUES[(int) ( Math.random() * 2 + 0)];
+    }
+
 }

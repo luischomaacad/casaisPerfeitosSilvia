@@ -20,8 +20,8 @@ public class App {
         map.addParedes(1, 1);
         map.addParedes(1, 2);
         map.addParedes(1, 3);
-        map.addParedes(10, 1);
         map.addParedes(8, 1);
+        map.addParedes(8, 2);
         map.addParedes(5, 1);
         map.addParedes(7, 7);
         map.addParedes(7, 8);
@@ -43,11 +43,10 @@ public class App {
         int limiteQualidade = 4;
         while (parada) {
             for (Candidato candidato : candidatos) {
-                //Thread.currentThread().sleep(500);
                 candidato.acao();
-                map.printMap();
-
             }
+            map.printMap();
+            Thread.currentThread().sleep(1000);
              //map.printMap();
              if(map.qualidadeCasais() == limiteQualidade){
               parada = true;
